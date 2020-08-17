@@ -1,1 +1,3 @@
-# LeetCode
+# LeetCode code samples
+
+A tiny fraction of my work on data structures & algorithm problems...
