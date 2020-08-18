@@ -1,0 +1,36 @@
+class Solution {
+public:
+    int eraseOverlapIntervals(vector<vector<int>>& intervals) {
+        sort(intervals.begin(), intervals.end(), [](vector<int> &a, vector<int> &b) { return a[0] < b[0]; } );
+        
+        int i = 0;  // index of first unprocessed interval
+        int len = intervals.size();
+        int ans = 0;  // number of deleted intervals
+        while (i < len) {
+            // Find all intervals overlapping with i. All but one must be deleted.
+            // Make the greedy choice: keep the interval with lowest right(end)-value,
+            // to maximize room for the remaining intervals.
+            
+            // last interval overlapping with i (expand)
+            int j = i;
+            
+            // Keep track of the interval with min R-value in intervals that overlap with intervals[i].
+            // We will keep this interval.
+            int minR = i;
+            
+            while (j+1 < len && intervals[j+1][0] < intervals[i][1]) {
+                ++j;
+                if (intervals[j][1] < intervals[minR][1])
+                    minR = j;
+            }
+            
+            // Delete all intervals before minR, i.e. [i..minR-1], which is of size minR-i.
+            ans += minR-i;
+            
+            // Next interval to process is the first interval after minR that doesn't overlap with minR.
+            for (i = minR+1; i < len && intervals[i][0] < intervals[minR][1]; ++i)
+                ++ans;
+        }
+        return ans;
+    }
+};
